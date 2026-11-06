@@ -1,0 +1,18 @@
+{
+  "appName": "Smart Family Budget Manager",
+  "tagline": "Private, secure and financially accurate household management",
+  "status": {
+    "online": "System Online",
+    "connecting": "Connecting...",
+    "healthy": "All systems operational"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "accounts": "Accounts",
+    "transactions": "Transactions",
+    "budgets": "Budgets",
+    "reports": "Reports",
+    "settings": "Settings"
+  },
+  "currencySymbol": "₹"
+}
