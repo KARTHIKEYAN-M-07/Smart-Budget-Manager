@@ -122,17 +122,11 @@ class Transaction(Base, UUIDPrimaryKeyMixin, TimestampMixin, OptimisticLockMixin
 
     # Relationships
     household: Mapped["Household"] = relationship("Household", back_populates="transactions")
-    account: Mapped["FinancialAccount"] = relationship(
-        "FinancialAccount", back_populates="transactions"
-    )
+    account: Mapped["FinancialAccount"] = relationship("FinancialAccount", back_populates="transactions")
     category: Mapped["Category | None"] = relationship("Category", back_populates="transactions")
     user: Mapped["User"] = relationship("User", back_populates="transactions")
-    transfer_group: Mapped["TransferGroup | None"] = relationship(
-        "TransferGroup", back_populates="transactions"
-    )
-    linked_transaction: Mapped["Transaction | None"] = relationship(
-        "Transaction", remote_side="Transaction.id"
-    )
+    transfer_group: Mapped["TransferGroup | None"] = relationship("TransferGroup", back_populates="transactions")
+    linked_transaction: Mapped["Transaction | None"] = relationship("Transaction", remote_side="Transaction.id")
     attachments: Mapped[list["Attachment"]] = relationship(
         "Attachment",
         back_populates="transaction",

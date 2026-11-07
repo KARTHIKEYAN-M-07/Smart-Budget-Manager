@@ -45,3 +45,19 @@
 - **Decision**: Enforce household and visibility isolation primarily in the application layer (FastAPI dependencies and queries returning 404 for missing or unauthorized resources). Support PostgreSQL RLS policies as secondary defense in depth with connection-pool reset verification.
 - **Alternatives Considered**: Relying solely on PostgreSQL RLS. Rejected due to complexity with connection pooling (potential tenant context leakage if connection variables are not reset on checkout).
 - **Consequences**: Robust multi-layered protection; comprehensive authorization tests at the API layer.
+
+---
+
+## ADR 007: Zero External AI & Local Deterministic Parsing for Integrations
+- **Context**: Users want automatic intake of bank SMS alerts and e-commerce receipts, but third-party AI APIs (e.g. cloud LLMs) pose unacceptable privacy risks of leaking family financial amounts, merchant names, and balances.
+- **Decision**: Reject all external AI API calls. Implement deterministic, local regex parsing for standard Indian banking formats (HDFC, SBI, ICICI, Axis, UPI) and receipts. Automatically redact OTPs, PINs, and account balances before persisting. Stage parsed items into an inbox requiring manual family review before ledger entry.
+- **Alternatives Considered**: Sending anonymized snippets to OpenAI/Claude. Rejected because prompt extraction risks and third-party data retention violate family privacy invariants.
+- **Consequences**: 100% data privacy; zero external network calls; instant local parsing with no subscription or token costs.
+
+---
+
+## ADR 008: Automated Cryptographic Backup Verification & DPDP Right-to-be-Forgotten
+- **Context**: A backup is useless unless proven restorable. Furthermore, Indian DPDP and GDPR require user data portability and permanent erasure.
+- **Decision**: Implement an automated restore drill (`backup_and_restore_drill.py`) verifying AES-256-GCM decryption, SHA-256 checksums, and schema/table reconstitution into an isolated database. Provide machine-readable data portability (`GET /api/v1/household/export`) and cascading right-to-be-forgotten deletion (`DELETE /api/v1/household/purge`) guarded by Owner RBAC and an explicit confirmation phrase.
+- **Alternatives Considered**: Relying solely on `pg_dump` cron jobs without verification. Rejected because unverified backups frequently fail during actual emergencies due to corruption or schema incompatibilities.
+- **Consequences**: Certified real-data readiness; full regulatory compliance for privacy and data portability.

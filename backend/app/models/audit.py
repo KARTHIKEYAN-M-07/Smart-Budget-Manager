@@ -16,9 +16,7 @@ class AuditLog(Base, UUIDPrimaryKeyMixin):
 
     __tablename__ = "audit_logs"
     __table_args__ = (
-        CheckConstraint(
-            "action IN ('CREATE', 'UPDATE', 'VOID', 'REVERSE')", name="ck_audit_action"
-        ),
+        CheckConstraint("action IN ('CREATE', 'UPDATE', 'VOID', 'REVERSE')", name="ck_audit_action"),
         Index("idx_audit_logs_entity", "entity_name", "entity_id"),
     )
 

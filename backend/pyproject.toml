@@ -21,12 +21,15 @@ dependencies = [
     "argon2-cffi>=23.1.0",
     "aiosqlite>=0.21.0",
     "python-multipart>=0.0.20",
+    "celery>=5.4.0",
+    "redis>=5.2.0",
 ]
 
 [tool.pytest.ini_options]
 minversion = "8.0"
 addopts = "-ra -q --strict-markers"
 testpaths = ["tests"]
+pythonpath = ["backend", "."]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 
@@ -39,7 +42,7 @@ select = ["E", "F", "W", "I", "B", "S", "C4", "UP"]
 ignore = ["B008", "S101", "E501"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S106"]
+"tests/*" = ["S105", "S106"]
 "alembic/*" = ["E501", "W291"]
 
 [tool.bandit]

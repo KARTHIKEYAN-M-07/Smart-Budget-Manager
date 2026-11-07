@@ -68,9 +68,7 @@ async def test_create_user_and_household():
         await session.commit()
 
         # Query back
-        res = await session.execute(
-            select(HouseholdMember).where(HouseholdMember.household_id == household.id)
-        )
+        res = await session.execute(select(HouseholdMember).where(HouseholdMember.household_id == household.id))
         member = res.scalar_one()
         assert member.role == "Owner"
         assert member.user_id == user.id
@@ -145,9 +143,7 @@ async def test_derived_balance_calculation():
         txs = (
             (
                 await session.execute(
-                    select(Transaction).where(
-                        Transaction.account_id == account.id, Transaction.status == "POSTED"
-                    )
+                    select(Transaction).where(Transaction.account_id == account.id, Transaction.status == "POSTED")
                 )
             )
             .scalars()

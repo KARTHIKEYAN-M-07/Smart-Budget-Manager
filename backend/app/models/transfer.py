@@ -24,9 +24,7 @@ class TransferGroup(Base, UUIDPrimaryKeyMixin):
     """
 
     __tablename__ = "transfer_groups"
-    __table_args__ = (
-        CheckConstraint("total_amount > 0", name="ck_transfer_total_amount_positive"),
-    )
+    __table_args__ = (CheckConstraint("total_amount > 0", name="ck_transfer_total_amount_positive"),)
 
     household_id: Mapped[uuid.UUID] = mapped_column(
         Uuid(as_uuid=True),

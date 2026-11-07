@@ -79,9 +79,7 @@ def upgrade() -> None:
         ["household_id"],
         unique=False,
     )
-    op.create_index(
-        op.f("ix_household_members_user_id"), "household_members", ["user_id"], unique=False
-    )
+    op.create_index(op.f("ix_household_members_user_id"), "household_members", ["user_id"], unique=False)
 
     # 4. invitations
     op.create_table(
@@ -103,9 +101,7 @@ def upgrade() -> None:
         ),
         sa.PrimaryKeyConstraint("id", name=op.f("pk_invitations")),
         sa.UniqueConstraint("token_hash", name=op.f("uq_invitations_token_hash")),
-        sa.CheckConstraint(
-            "role IN ('Administrator', 'Member', 'ReadOnly')", name="ck_invitation_role"
-        ),
+        sa.CheckConstraint("role IN ('Administrator', 'Member', 'ReadOnly')", name="ck_invitation_role"),
     )
 
     # 5. user_sessions
@@ -129,9 +125,7 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id", name=op.f("pk_user_sessions")),
         sa.UniqueConstraint("session_token_hash", name=op.f("uq_user_sessions_session_token_hash")),
     )
-    op.create_index(
-        "idx_session_lookup", "user_sessions", ["session_token_hash", "expires_at"], unique=False
-    )
+    op.create_index("idx_session_lookup", "user_sessions", ["session_token_hash", "expires_at"], unique=False)
 
     # 6. financial_accounts
     op.create_table(
@@ -202,9 +196,7 @@ def upgrade() -> None:
         ),
         sa.PrimaryKeyConstraint("id", name=op.f("pk_categories")),
         sa.UniqueConstraint("household_id", "name", "type", name="uq_category_household_name_type"),
-        sa.CheckConstraint(
-            "type IN ('income', 'expense', 'transfer', 'investment')", name="ck_category_type"
-        ),
+        sa.CheckConstraint("type IN ('income', 'expense', 'transfer', 'investment')", name="ck_category_type"),
     )
 
     # 8. transfer_groups
@@ -294,18 +286,14 @@ def upgrade() -> None:
         ),
         sa.PrimaryKeyConstraint("id", name=op.f("pk_transactions")),
         sa.UniqueConstraint("idempotency_key", name=op.f("uq_transactions_idempotency_key")),
-        sa.CheckConstraint(
-            "amount > 0 AND amount <= 100000000000.00", name="ck_transaction_amount_valid"
-        ),
+        sa.CheckConstraint("amount > 0 AND amount <= 100000000000.00", name="ck_transaction_amount_valid"),
         sa.CheckConstraint("direction IN ('INFLOW', 'OUTFLOW')", name="ck_transaction_direction"),
         sa.CheckConstraint(
             "transaction_type IN ('INCOME', 'EXPENSE', 'TRANSFER_OUT', 'TRANSFER_IN', 'REFUND', 'LOAN_DISBURSEMENT', 'LOAN_REPAYMENT', 'INVESTMENT_BUY', 'INVESTMENT_SELL', 'OPENING_BALANCE')",
             name="ck_transaction_type",
         ),
         sa.CheckConstraint("visibility IN ('private', 'shared')", name="ck_transaction_visibility"),
-        sa.CheckConstraint(
-            "status IN ('POSTED', 'VOIDED', 'REVERSED')", name="ck_transaction_status"
-        ),
+        sa.CheckConstraint("status IN ('POSTED', 'VOIDED', 'REVERSED')", name="ck_transaction_status"),
     )
     op.create_index(
         "idx_transactions_account_date",
@@ -369,13 +357,9 @@ def upgrade() -> None:
             ["user_id"], ["users.id"], name=op.f("fk_audit_logs_user_id_users"), ondelete="SET NULL"
         ),
         sa.PrimaryKeyConstraint("id", name=op.f("pk_audit_logs")),
-        sa.CheckConstraint(
-            "action IN ('CREATE', 'UPDATE', 'VOID', 'REVERSE')", name="ck_audit_action"
-        ),
+        sa.CheckConstraint("action IN ('CREATE', 'UPDATE', 'VOID', 'REVERSE')", name="ck_audit_action"),
     )
-    op.create_index(
-        "idx_audit_logs_entity", "audit_logs", ["entity_name", "entity_id"], unique=False
-    )
+    op.create_index("idx_audit_logs_entity", "audit_logs", ["entity_name", "entity_id"], unique=False)
 
     # 12. security_events
     op.create_table(

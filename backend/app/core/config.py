@@ -28,6 +28,13 @@ class Settings(BaseSettings):
         description="32-byte key for AES-256-GCM field level encryption",
     )
 
+    # Session & Cookie Configuration
+    SESSION_COOKIE_NAME: str = "sfbm_session"
+    SESSION_EXPIRE_SECONDS: int = 604800  # 7 days
+    SESSION_IDLE_TIMEOUT_SECONDS: int = 7200  # 2 hours
+    COOKIE_SECURE: bool = False
+    COOKIE_SAME_SITE: str = "lax"
+
     DATABASE_URL: str = Field(
         default="sqlite+aiosqlite:///:memory:",
         description="Async SQLAlchemy database URL",
@@ -40,6 +47,11 @@ class Settings(BaseSettings):
     ALLOWED_CORS_ORIGINS: str = Field(
         default="http://localhost:5173,http://localhost:3000",
         description="Comma-separated allowed CORS origins",
+    )
+
+    REDIS_URL: str = Field(
+        default="redis://localhost:6379/0",
+        description="Redis connection URL for Celery and caching",
     )
 
     DEFAULT_CURRENCY: str = "INR"

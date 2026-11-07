@@ -17,9 +17,7 @@ class Category(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     __tablename__ = "categories"
     __table_args__ = (
         UniqueConstraint("household_id", "name", "type", name="uq_category_household_name_type"),
-        CheckConstraint(
-            "type IN ('income', 'expense', 'transfer', 'investment')", name="ck_category_type"
-        ),
+        CheckConstraint("type IN ('income', 'expense', 'transfer', 'investment')", name="ck_category_type"),
     )
 
     household_id: Mapped[uuid.UUID] = mapped_column(
@@ -42,9 +40,7 @@ class Category(Base, UUIDPrimaryKeyMixin, TimestampMixin):
 
     # Relationships
     household: Mapped["Household"] = relationship("Household", back_populates="categories")
-    parent: Mapped["Category | None"] = relationship(
-        "Category", remote_side="Category.id", backref="subcategories"
-    )
+    parent: Mapped["Category | None"] = relationship("Category", remote_side="Category.id", backref="subcategories")
     transactions: Mapped[list["Transaction"]] = relationship(
         "Transaction",
         back_populates="category",

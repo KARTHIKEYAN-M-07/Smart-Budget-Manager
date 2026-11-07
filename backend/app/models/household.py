@@ -92,11 +92,7 @@ class HouseholdMember(Base, UUIDPrimaryKeyMixin):
 
 class Invitation(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     __tablename__ = "invitations"
-    __table_args__ = (
-        CheckConstraint(
-            "role IN ('Administrator', 'Member', 'ReadOnly')", name="ck_invitation_role"
-        ),
-    )
+    __table_args__ = (CheckConstraint("role IN ('Administrator', 'Member', 'ReadOnly')", name="ck_invitation_role"),)
 
     household_id: Mapped[uuid.UUID] = mapped_column(
         Uuid(as_uuid=True),
